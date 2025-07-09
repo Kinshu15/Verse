@@ -1,11 +1,15 @@
 import './App.css'
-import HomePage from './Components/HomePage'
+import Pages from "./Components/Pages/Pages"
 function App() {
-  
 
   return (
     <>
-      <HomePage/>
+      
+      <h1 className='App'>
+        <Pages/>
+      </h1>
+      
+
     </>
   )
 }
