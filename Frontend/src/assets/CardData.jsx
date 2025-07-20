@@ -1,8 +1,8 @@
-import card1 from "../assets/images/Card1.jpg";
-import card2 from "../assets/images/Card2.jpeg";
-import card3 from "../assets/images/Card3.jpeg";
-import card4 from "../assets/images/Card4.jpeg";
-import card5 from "../assets/images/Card5.jpg";
+import card1 from "../assets/images/card1.jpg";
+import card2 from "../assets/images/card2.jpeg";
+import card3 from "../assets/images/card3.jpeg";
+import card4 from "../assets/images/card4.jpeg";
+import card5 from "../assets/images/card5.jpg";
 
 export const cardData = [
   {
