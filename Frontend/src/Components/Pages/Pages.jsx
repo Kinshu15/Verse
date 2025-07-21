@@ -1,9 +1,15 @@
 import React from 'react'
 import Home from './Home'
+import {Routes,Route} from "react-router-dom"
+import Login from './Login'
 const Pages = () => {
   return (
     <div>
-      <Home/>
+      <Routes>
+        <Route path="/" element={<Home/>}></Route>
+        <Route path="/Login" element={<Login/>}></Route>
+      </Routes>
+      
     </div>
   )
 }
