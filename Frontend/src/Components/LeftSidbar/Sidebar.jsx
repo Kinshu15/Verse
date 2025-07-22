@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useRef,useState,useEffect,useContext}from "react";
 import nature from "../../assets/images/nature.jpg";
 import { Tooltip } from "@material-tailwind/react";
 import { Avatar } from "@material-tailwind/react";
@@ -7,8 +7,13 @@ import job from "../../assets/images/job.png"
 import location from "../../assets/images/location.png"
 import Facebook from "../../assets/images/Facebook.png"
 import twitter from "../../assets/images/twitter.png"
+import { AuthContext } from "../AppContext/AppContext";
 const Sidebar = () => {
+  const [data,setData]=useState([])
+  const count = useRef(0)
+  const {user,userData} = useContext(AuthContext)
   return (
+    
     <div className="flex flex-col h-screen bg-white pb-4 border-2 rounded-r-xl shadow-lg">
       <div className="flex flex-col items-center relative">
         <img
@@ -24,7 +29,7 @@ const Sidebar = () => {
       </div>
       <div className="flex flex-col items-center pt-6">
         <p className="font-sans font-medium text-xs text-gray-700 no-underline tracking-normal leading-none">
-          User Email
+          {user?.email || userData?.email}
         </p>
         <p className="font-sans font-medium text-xs text-gray-700 no-underline tracking-normal leading-none">
           Access xclusive tools and insights

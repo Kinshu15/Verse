@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
+import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -16,11 +17,12 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { AuthContext } from "../AppContext/AppContext";
 import { auth, onAuthStateChanged } from "../Firebase/Firebase.jsx";
 
-const Login = () => {
+const Register = () => {
   const [loading, setLoading] = useState(false);
-  const { signInWithGoogle, loginWithEmailAndPassword } =
-    useContext(AuthContext);
-  const navigate = useNavigate();
+
+  const { registerWithEmailAndPassword } = useContext(AuthContext);
+  const navigate = useNavigate;
+
   useEffect(() => {
     setLoading(true);
     onAuthStateChanged(auth, (user) => {
@@ -32,41 +34,51 @@ const Login = () => {
       }
     });
   }, [navigate]);
+
   let initialValues = {
+    name: "",
     email: "",
     password: "",
   };
-
   const validationSchema = Yup.object({
+    name: Yup.string()
+      .required("Required")
+      .min("4", "Must be 4 characters long")
+      .matches(/^[a-zA-Z]+$/, "Name can only contain letters"),
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
       .required("Required")
-      .min(6, "Must be atleat 6 character long")
+      .min("6", "Must be atleat 6 character long")
       .matches(/^[a-zA-Z]+$/, "Password can only contain letters"),
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { email, password } = formik.values;
+  const handleRegister = (e) => {
+    const { name, email, password } = formik.values;
+
     if (formik.isValid === true) {
-      loginWithEmailAndPassword(email, password);
+      registerWithEmailAndPassword(name, email, password);
       setLoading(true);
     } else {
       setLoading(false);
-      alert("check you details");
+      alert("check input fields");
     }
-    console.log("formik", formik);
+    e.preventDefault();
   };
 
-  const formik = useFormik({ initialValues, validationSchema, handleSubmit });
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    handleRegister,
+  });
+
   return (
     <>
       {loading ? (
-        <div className="grid grid-cols-1 h-screen justify-items-center items-center">
+        <div className="grid grid-cols-1 justify-items-center items-center h-screen">
           <ClipLoader color="#000000" size={150} speedMultiplier={0.5} />
         </div>
       ) : (
-        <div className="grid grid-cols-1 h-screen justify-items-center items-center">
+        <div className="grid grid-cols-1 justify-items-center items-center h-screen">
           <Card className="w-96">
             <CardHeader
               variant="gradient"
@@ -74,12 +86,28 @@ const Login = () => {
               className="mb-4 grid h-28 place-items-center"
             >
               <Typography variant="h3" color="white">
-                LOGIN
+                REGISTER
               </Typography>
             </CardHeader>
             <CardBody className="flex flex-col gap-4">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleRegister}>
                 <div className="mb-2">
+                  <Input
+                    name="name"
+                    type="text"
+                    label="Name"
+                    size="lg"
+                    {...formik.getFieldProps("name")}
+                  />
+                </div>
+                <div>
+                  {formik.touched.name && formik.errors.name && (
+                    <Typography variant="small" color="red">
+                      {formik.errors.name}
+                    </Typography>
+                  )}
+                </div>
+                <div className="mb-2 mt-4">
                   <Input
                     name="email"
                     type="email"
@@ -95,7 +123,7 @@ const Login = () => {
                     </Typography>
                   )}
                 </div>
-                <div className="mt-4 mb-2">
+                <div className="mb-2 mt-4">
                   <Input
                     name="password"
                     type="password"
@@ -111,35 +139,23 @@ const Login = () => {
                     </Typography>
                   )}
                 </div>
+
                 <Button
                   variant="gradient"
                   fullWidth
-                  className="mb-4 "
                   type="submit"
+                  className="mb-4"
                 >
-                  Login
+                  Register
                 </Button>
               </form>
             </CardBody>
             <CardFooter className="pt-0">
-              <Button
-                variant="gradient"
-                fullWidth
-                className="mb-4 "
-                onClick={signInWithGoogle}
-              >
-                Sign In with google
-              </Button>
-              <Link to="/reset">
-                <p className="ml-1 font-bold text-sm text-blue-500 text-center">
-                  Reset the Password
-                </p>
-              </Link>
-              <div className="mt-6 flex items-center font-serif text-base justify-center">
-                Don't have an account?
-                <Link to="/register">
-                  <p className="ml-1 font-bold text-sm text-blue-500 text-center">
-                    Register
+              <div className="mt-6 flex font-medium text-base justify-center">
+                Already have an account?
+                <Link to="/Login">
+                  <p className="ml-1 font-bold text-base text-blue-500 text-center">
+                    Login
                   </p>
                 </Link>
               </div>
@@ -151,4 +167,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
