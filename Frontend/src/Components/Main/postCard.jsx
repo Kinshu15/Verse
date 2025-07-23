@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { Avatar } from "@material-tailwind/react";
 import avatar from "../../assets/images/avatar.jpeg"
 import like from  "../../assets/images/like.png"
-import remove from "../../assets/images/remove.png"
 import comment from "../../assets/images/comment.png"
+
 import { AuthContext } from '../AppContext/AppContext';
 import {
   PostReducer,
@@ -74,7 +74,12 @@ const PostCard = ({uid, id, logo, name, text, email, image, timestamp, likes = 0
             {text}
           </p>
           {image && (
-            <img src={image} alt="post" className="w-full h-auto" />
+            <img 
+              src={image} 
+              alt="post" 
+              className="w-full max-w-full h-auto object-contain rounded-xl mt-2"
+              style={{ maxHeight: '500px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+            />
           )}
 
           {/* Like and Comment Section */}
@@ -122,24 +127,6 @@ const PostCard = ({uid, id, logo, name, text, email, image, timestamp, likes = 0
           )}
         </div>
         <div className="flex justify-around items-center pt-4">
-          <button className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100">
-            <img className="h-8 mr-4 " src={like} alt="Like" />
-            {/* <p>Display like</p> */}
-          </button>
-          <div className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100">
-            <div className="flex items-center cursor-pointer">
-              <img className="h-8 mr-4 " src={comment} alt="Comment" />
-              <p className="font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
-                Comments
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <img className="h-8 mr-4 " src={remove} alt="Delete" />
-            <p className="font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
-              Delete
-            </p>
-          </div>
         </div>
       </div>
     </div>

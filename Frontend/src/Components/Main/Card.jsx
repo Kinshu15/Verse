@@ -12,15 +12,6 @@ const Card = ({ name, img, status }) => {
         <p className="absolute bottom-4 left-4 text-sm font-medium text-white no-underline leading-none">
           {name}
         </p>
-        <p
-          className={`${
-            status === "Offline"
-              ? "absolute bottom-4 right-4 text-sm font-medium text-red-500 no-underline leading-none"
-              : "absolute bottom-4 right-4 text-sm font-medium text-green-500 no-underline leading-none"
-          }`}
-        >
-          {status}
-        </p>
       </div>
     </div>
   );
