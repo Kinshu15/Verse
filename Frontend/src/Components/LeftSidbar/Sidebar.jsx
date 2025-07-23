@@ -5,8 +5,7 @@ import { Avatar } from "@material-tailwind/react";
 import avatar from "../../assets/images/avatar.jpeg";
 import job from "../../assets/images/job.png"
 import location from "../../assets/images/location.png"
-import Facebook from "../../assets/images/Facebook.png"
-import twitter from "../../assets/images/twitter.png"
+
 import { AuthContext } from "../AppContext/AppContext";
 const Sidebar = () => {
   const [data,setData]=useState([])
@@ -23,7 +22,7 @@ const Sidebar = () => {
         ></img>
         <div className="absolute -bottom-4">
           <Tooltip content="profile" placement="top">
-            <Avatar size="md" src={avatar} alt="avatat"></Avatar>
+            <Avatar size="md" src={user?.photoURL || avatar} alt="avatat"></Avatar>
           </Tooltip>
         </div>
       </div>
@@ -51,7 +50,7 @@ const Sidebar = () => {
             Developer
           </p>
         </div>
-        <div className="flex items-center justify-center pt-4">
+        {/* <div className="flex items-center justify-center pt-4">
           <p className="font-bold text-md text-[#0177b7] no-underline tracking-normal leading-none">
             Events
           </p>
@@ -64,9 +63,9 @@ const Sidebar = () => {
           <p className="font-bold text-md text-[#0177b7] no-underline tracking-normal leading-none">
             More
           </p>         
-        </div>
+        </div> */}
       </div>
-      <div className="ml-2">
+      {/* <div className="ml-2">
         <p className="font-bold text-lg no-underline tracking-normal leading-none py-2">
           Social Profiles
         </p>
@@ -82,7 +81,7 @@ const Sidebar = () => {
             Twitter
           </p>
         </div>
-      </div>
+      </div> */}
       <div></div>
     </div>
   );

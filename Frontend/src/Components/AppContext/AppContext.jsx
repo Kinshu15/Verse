@@ -8,7 +8,7 @@ import {
   signOut,
 } from "firebase/auth";
 import React, { createContext, useState, useEffect } from "react";
-import { auth, db, onAuthStateChanged } from "../Firebase/Firebase.jsx";
+import { auth, onAuthStateChanged } from "../Firebase/Firebase.jsx";
 import {
   collection,
   getDocs,
@@ -17,6 +17,7 @@ import {
   addDoc,
   onSnapshot,
 } from "firebase/firestore";
+import { db } from "../Firebase/Firebase";
 import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 
