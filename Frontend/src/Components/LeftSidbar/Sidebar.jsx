@@ -13,76 +13,37 @@ const Sidebar = () => {
   const {user,userData} = useContext(AuthContext)
   return (
     
-    <div className="flex flex-col h-screen bg-white pb-4 border-2 rounded-r-xl shadow-lg">
-      <div className="flex flex-col items-center relative">
+    <div className="flex flex-col min-h-screen h-screen bg-white pb-4 border-2 rounded-r-xl shadow-lg max-w-xs w-full mx-auto md:mx-0">
+      <div className="relative flex flex-col items-center">
         <img
-          className="h-28 w-full rounded-r-xl"
+          className="w-full h-32 md:h-40 object-cover rounded-t-xl"
           src={nature}
           alt="nature"
-        ></img>
-        <div className="absolute -bottom-4">
+        />
+        <div className="absolute left-1/2 -bottom-10 transform -translate-x-1/2">
           <Tooltip content="profile" placement="top">
-            <Avatar size="md" src={user?.photoURL || avatar} alt="avatat"></Avatar>
+            <Avatar size="xxl" src={user?.photoURL || avatar} alt="avatar" className="border-4 border-white shadow-lg" />
           </Tooltip>
         </div>
       </div>
-      <div className="flex flex-col items-center pt-6">
-        <p className="font-sans font-medium text-xs text-gray-700 no-underline tracking-normal leading-none">
+      <div className="flex flex-col items-center pt-16 pb-4 px-2">
+        <p className="font-semibold text-base text-gray-800 text-center break-all">
           {user?.email || userData?.email}
         </p>
-        <p className="font-sans font-medium text-xs text-gray-700 no-underline tracking-normal leading-none">
-          Access xclusive tools and insights
-        </p>
-        <p className="font-sans font-medium text-xs text-gray-700 no-underline tracking-normal leading-none">
-          try premium for free
+        <p className="font-medium text-sm text-gray-600 text-center mt-1">
+          Access xclusive tools and insights<br />try premium for free
         </p>
       </div>
-      <div className="flex flex-col pl-2">
-        <div className="flex items-center pb-4">
-          <img className="h-10" src={location} alt="location"></img>
-          <p className="font-bold text-lg no-underline tracking-normal leading-none">
-            Delhi
-          </p>
+      <div className="flex flex-col gap-4 px-4 mt-2">
+        <div className="flex items-center bg-gray-100 rounded-xl p-3 shadow-sm">
+          <img className="h-8 w-8 mr-3" src={location} alt="location" />
+          <span className="font-bold text-lg text-gray-800">Delhi</span>
         </div>
-        <div className="flex items-center pb-4">
-          <img className="h-10" src={job} alt="job"></img>
-          <p className="font-bold text-lg no-underline tracking-normal leading-none">
-            Developer
-          </p>
+        <div className="flex items-center bg-gray-100 rounded-xl p-3 shadow-sm">
+          <img className="h-8 w-8 mr-3" src={job} alt="job" />
+          <span className="font-bold text-lg text-gray-800">Developer</span>
         </div>
-        {/* <div className="flex items-center justify-center pt-4">
-          <p className="font-bold text-md text-[#0177b7] no-underline tracking-normal leading-none">
-            Events
-          </p>
-          <p className="font-bold text-md text-[#0177b7] no-underline tracking-normal leading-none">
-            Groups 
-          </p>
-          <p className="font-bold text-md text-[#0177b7] no-underline tracking-normal leading-none">
-            Follow
-          </p>
-          <p className="font-bold text-md text-[#0177b7] no-underline tracking-normal leading-none">
-            More
-          </p>         
-        </div> */}
       </div>
-      {/* <div className="ml-2">
-        <p className="font-bold text-lg no-underline tracking-normal leading-none py-2">
-          Social Profiles
-        </p>
-        <div className="flex items-center">
-          <img className="h-10 mb-3 mr-2" src={Facebook} alt="Facebook"></img>
-          <p className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r to-red-500 from-blue-500 no-underline tracking-normal leading-none py-2">
-            Facebook
-          </p>
-        </div>
-        <div className="flex items-center">
-          <img className="h-10 mb-3 mr-2" src={twitter} alt="twitter"></img>
-          <p className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r to-red-500 from-blue-500 no-underline tracking-normal leading-none py-2">
-            Twitter
-          </p>
-        </div>
-      </div> */}
-      <div></div>
     </div>
   );
 };

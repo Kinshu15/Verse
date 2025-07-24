@@ -33,8 +33,7 @@ const Main = () => {
   const [loading, setLoading] = useState(true);
   const [state, dispatch] = useReducer(PostReducer, postsStates);
   const { SUBMIT_POST, HANDLE_ERROR } = postActions;
-  const [localLikes, setLocalLikes] = useState({});
-  const [localComments, setLocalComments] = useState({});
+  const [likedPosts, setLikedPosts] = useState(new Set());
 
   // Function to fetch user's liked posts
   const fetchLikedPosts = useCallback(async () => {
@@ -48,7 +47,7 @@ const Main = () => {
       if (error) throw error;
 
       if (data) {
-        // setLikedPosts(new Set(data.map(like => like.post_id))); // This line was removed
+        setLikedPosts(new Set(data.map(like => like.post_id)));
       }
     } catch (error) {
       console.error('Error fetching liked posts:', error);
@@ -56,20 +55,114 @@ const Main = () => {
   }, [user]);
 
   // Handle post likes
-  const handleLike = (postId, isLiking) => {
-    setLocalLikes(prev => ({
-      ...prev,
-      [postId]: isLiking ? 1 : 0
-    }));
+  const handleLike = async (postId, isLiking) => {
+    if (!user) {
+      alert("Please log in to like posts");
+      return;
+    }
+    
+    try {
+      if (isLiking) {
+        // Add like
+        const { error: likeError } = await supaBase
+          .from('post_likes')
+          .insert([{
+            post_id: postId,
+            user_id: user.uid
+          }]);
+
+        if (likeError) throw likeError;
+
+        // Increment likes count
+        const { error: updateError } = await supaBase
+          .from('social_posts')
+          .update({ likes: state.posts.find(p => p.id === postId).likes + 1 })
+          .eq('id', postId);
+
+        if (updateError) throw updateError;
+
+        setLikedPosts(prev => new Set([...prev, postId]));
+      } else {
+        // Remove like
+        const { error: unlikeError } = await supaBase
+          .from('post_likes')
+          .delete()
+          .match({ post_id: postId, user_id: user.uid });
+
+        if (unlikeError) throw unlikeError;
+
+        // Decrement likes count
+        const { error: updateError } = await supaBase
+          .from('social_posts')
+          .update({ likes: state.posts.find(p => p.id === postId).likes - 1 })
+          .eq('id', postId);
+
+        if (updateError) throw updateError;
+
+        setLikedPosts(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(postId);
+          return newSet;
+        });
+      }
+
+      await fetchPosts();
+    } catch (error) {
+      console.error('Error updating like:', error);
+      alert('Failed to update like. Please try again.');
+      dispatch({ type: HANDLE_ERROR });
+    }
   };
 
   // Handle post comments
-  const handleComment = (postId, commentText) => {
-    if (!commentText?.trim()) return;
-    setLocalComments(prev => ({
-      ...prev,
-      [postId]: [...(prev[postId] || []), commentText.trim()]
-    }));
+  const handleComment = async (postId, commentText) => {
+    if (!user) {
+      alert("Please log in to comment");
+      return;
+    }
+    
+    if (!commentText?.trim()) {
+      alert("Please enter a comment");
+      return;
+    }
+    
+    try {
+      // First, insert the comment
+      const { error: commentError } = await supaBase
+        .from('post_comments')
+        .insert([{
+          post_id: postId,
+          user_id: user.uid,
+          user_name: user.displayName || userData?.name,
+          user_avatar: user.photoURL,
+          content: commentText.trim(),
+          created_at: new Date().toISOString()
+        }]);
+
+      if (commentError) {
+        console.error('Comment error:', commentError);
+        throw new Error('Failed to add comment');
+      }
+
+      // Then, increment the comments count
+      const { error: updateError } = await supaBase
+        .from('social_posts')
+        .update({ 
+          comments: state.posts.find(p => p.id === postId).comments + 1 
+        })
+        .eq('id', postId);
+
+      if (updateError) {
+        console.error('Update error:', updateError);
+        throw new Error('Failed to update comment count');
+      }
+
+      await fetchPosts();
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      alert(error.message || 'Failed to add comment. Please try again.');
+      dispatch({ type: HANDLE_ERROR });
+    }
   };
 
   const handleUpload = (e) => {
@@ -353,11 +446,11 @@ const Main = () => {
                   image={post.image_url}
                   text={post.content}
                   timestamp={new Date(post.created_at).toLocaleString()}
-                  likes={localLikes[post.id] || 0}
-                  comments={(localComments[post.id] || []).length}
+                  likes={post.likes}
+                  comments={post.comments}
                   onLike={handleLike}
                   onComment={handleComment}
-                  isLiked={!!localLikes[post.id]}
+                  isLiked={likedPosts.has(post.id)}
                 />
               ))
             ) : (

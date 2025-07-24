@@ -43,13 +43,13 @@ const Register = () => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .required("Required")
-      .min("4", "Must be 4 characters long")
-      .matches(/^[a-zA-Z]+$/, "Name can only contain letters"),
+      .min(4, "Must be at least 4 characters long")
+      .matches(/^[a-zA-Z_]+$/, "Name can only contain letters and underscores (_)") ,
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
       .required("Required")
-      .min("6", "Must be atleat 6 character long")
-      .matches(/^[a-zA-Z]+$/, "Password can only contain letters"),
+      .min(6, "Must be at least 6 characters long")
+      .matches(/^[a-zA-Z0-9]+$/, "Password can only contain letters and numbers"),
   });
 
   const handleRegister = (e) => {
@@ -82,7 +82,7 @@ const Register = () => {
           <Card className="w-96">
             <CardHeader
               variant="gradient"
-              color="gray"
+              color="blue"
               className="mb-4 grid h-28 place-items-center"
             >
               <Typography variant="h3" color="white">
@@ -142,6 +142,7 @@ const Register = () => {
 
                 <Button
                   variant="gradient"
+                  color="blue"
                   fullWidth
                   type="submit"
                   className="mb-4"
